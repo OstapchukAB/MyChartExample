@@ -112,6 +112,18 @@ namespace WindowsFormsApp1
             
         }
 
+        //private void MyChart_MouseLeftButtonPressed(object sender, MouseEventArgs e)
+        //{
+            
+        //    if (e.LeftButton == MouseButtonState.Pressed)
+        //    {
+        //        MessageBox.Show("The Left Mouse Button is pressed");
+        //    }
+
+        //}
+       
+        
+        
         private void checkBox_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox ch = (CheckBox)sender;
@@ -133,9 +145,11 @@ namespace WindowsFormsApp1
         {
             if (checkBoxZoom.Checked)
             {
-                MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
-                MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
-                MyChart.MouseWheel += MyChart_MouseWheel;
+                //MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+                //MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
+                //MyChart.MouseWheel += MyChart_MouseWheel;
+                MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
+                MyChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
             }
             else {
                
@@ -143,43 +157,45 @@ namespace WindowsFormsApp1
                 var yAxis = MyChart.ChartAreas[0].AxisY;
                 xAxis.ScaleView.ZoomReset();
                 yAxis.ScaleView.ZoomReset();
-                MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = false;
-                MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = false;
-                MyChart.MouseWheel -= MyChart_MouseWheel;
+                //MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = false;
+                //MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = false;
+                //MyChart.MouseWheel -= MyChart_MouseWheel;
+                MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = false;
+                MyChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = false;
             }
         }
 
         private void MyChart_MouseWheel(object sender, MouseEventArgs e)
         {
-            var chart = (Chart)sender;
-            var xAxis = chart.ChartAreas[0].AxisX;
-            var yAxis = chart.ChartAreas[0].AxisY;
+            //var chart = (Chart)sender;
+            //var xAxis = chart.ChartAreas[0].AxisX;
+            //var yAxis = chart.ChartAreas[0].AxisY;
 
-            try
-            {
-                if (e.Delta < 0) // Scrolled down.
-                {
-                    xAxis.ScaleView.ZoomReset();
-                    yAxis.ScaleView.ZoomReset();
-                }
-                else if (e.Delta > 0) // Scrolled up.
-                {
-                    var xMin = xAxis.ScaleView.ViewMinimum;
-                    var xMax = xAxis.ScaleView.ViewMaximum;
-                    var yMin = yAxis.ScaleView.ViewMinimum;
-                    var yMax = yAxis.ScaleView.ViewMaximum;
-                    double k =2;
+            //try
+            //{
+            //    if (e.Delta < 0) // Scrolled down.
+            //    {
+            //        xAxis.ScaleView.ZoomReset();
+            //        yAxis.ScaleView.ZoomReset();
+            //    }
+            //    else if (e.Delta > 0) // Scrolled up.
+            //    {
+            //        var xMin = xAxis.ScaleView.ViewMinimum;
+            //        var xMax = xAxis.ScaleView.ViewMaximum;
+            //        var yMin = yAxis.ScaleView.ViewMinimum;
+            //        var yMax = yAxis.ScaleView.ViewMaximum;
+            //        double k =2;
 
-                    var posXStart = xAxis.PixelPositionToValue(e.Location.X) - (xMax - xMin) / k;
-                    var posXFinish = xAxis.PixelPositionToValue(e.Location.X) + (xMax - xMin) / k;
-                    var posYStart = yAxis.PixelPositionToValue(e.Location.Y) - (yMax - yMin) / k;
-                    var posYFinish = yAxis.PixelPositionToValue(e.Location.Y) + (yMax - yMin) / k;
+            //        var posXStart = xAxis.PixelPositionToValue(e.Location.X) - (xMax - xMin) / k;
+            //        var posXFinish = xAxis.PixelPositionToValue(e.Location.X) + (xMax - xMin) / k;
+            //        var posYStart = yAxis.PixelPositionToValue(e.Location.Y) - (yMax - yMin) / k;
+            //        var posYFinish = yAxis.PixelPositionToValue(e.Location.Y) + (yMax - yMin) / k;
 
-                    xAxis.ScaleView.Zoom(posXStart, posXFinish);
-                    yAxis.ScaleView.Zoom(posYStart, posYFinish);
-                }
-            }
-            catch { }
+            //        xAxis.ScaleView.Zoom(posXStart, posXFinish);
+            //        yAxis.ScaleView.Zoom(posYStart, posYFinish);
+            //    }
+            //}
+            //catch { }
         }
 
 
@@ -282,6 +298,11 @@ namespace WindowsFormsApp1
                 }
 
             }
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }
