@@ -36,6 +36,7 @@ namespace WindowsFormsApp1
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.checkBoxMeasurementMode = new System.Windows.Forms.CheckBox();
             this.checkBoxZoom = new System.Windows.Forms.CheckBox();
+            this.checkBoxBlackTheme = new System.Windows.Forms.CheckBox();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -90,6 +91,7 @@ namespace WindowsFormsApp1
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox2.Controls.Add(this.checkBoxBlackTheme);
             this.groupBox2.Controls.Add(this.checkBoxMeasurementMode);
             this.groupBox2.Controls.Add(this.checkBoxZoom);
             this.groupBox2.Controls.Add(this.checkBoxPoint);
@@ -125,6 +127,18 @@ namespace WindowsFormsApp1
             this.checkBoxZoom.UseVisualStyleBackColor = true;
             this.checkBoxZoom.CheckedChanged += new System.EventHandler(this.Zoom_CheckedChanged);
             // 
+            // checkBoxBlackTheme
+            // 
+            this.checkBoxBlackTheme.AutoSize = true;
+            this.checkBoxBlackTheme.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.checkBoxBlackTheme.Location = new System.Drawing.Point(818, 37);
+            this.checkBoxBlackTheme.Name = "checkBoxBlackTheme";
+            this.checkBoxBlackTheme.Size = new System.Drawing.Size(126, 24);
+            this.checkBoxBlackTheme.TabIndex = 6;
+            this.checkBoxBlackTheme.Text = "Темная тема";
+            this.checkBoxBlackTheme.UseVisualStyleBackColor = true;
+            this.checkBoxBlackTheme.CheckedChanged += new System.EventHandler(this.checkBoxBlackTheme_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -151,6 +165,7 @@ namespace WindowsFormsApp1
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.CheckBox checkBoxZoom;
         private System.Windows.Forms.CheckBox checkBoxMeasurementMode;
+        private System.Windows.Forms.CheckBox checkBoxBlackTheme;
     }
 }
 

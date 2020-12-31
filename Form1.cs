@@ -92,6 +92,8 @@ namespace WindowsFormsApp1
         private void Form1_Load(object sender, EventArgs e)
         {
             MyChart = new Chart();
+            
+            
             MyChart.Parent = groupBox1;
             MyChart.Dock = DockStyle.Fill;
             MyChart.DataSource = LstA;
@@ -99,8 +101,11 @@ namespace WindowsFormsApp1
             MyChart.Legends.Add(new Legend("myLegend"));
             MyChart.ChartAreas[0].AxisY.Title = "Коэффициент";
             MyChart.ChartAreas[0].AxisX.Title = "Дата";
-            
-           
+
+             
+
+
+
 
             checkBoxLine.Text = NameSeries[0];
             checkBoxPoint.Text = NameSeries[1];
@@ -245,6 +250,38 @@ namespace WindowsFormsApp1
             tooltip.Show(show, MyChart, pX, pY - 20);
         }
 
-      
+        private void checkBoxBlackTheme_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxBlackTheme.Checked)
+            {
+                MyChart.BackColor = Color.Gray;
+                MyChart.ChartAreas[0].BackColor = Color.LightGray;
+
+                //MyChart.ChartAreas[0].AxisY.LineColor = Color.White;  
+                //MyChart.ChartAreas[0].AxisX.LineColor = Color.White;
+               
+
+                foreach (Series s in MyChart.Series) {
+
+                   // s.=Color.Red; 
+                }
+
+            }
+            else {
+
+                MyChart.BackColor = (Color) default;
+                MyChart.ChartAreas[0].BackColor = (Color)default;
+                //MyChart.ChartAreas[0].AxisY.LineColor = (Color)default;
+                //MyChart.ChartAreas[0].AxisX.LineColor = (Color)default;
+
+
+                foreach (Series s in MyChart.Series)
+                {
+
+                    s.LabelBackColor = (Color)default;
+                }
+
+            }
+        }
     }
 }
