@@ -56,7 +56,7 @@ namespace WindowsFormsApp1
             MyChart.Series.Clear();  
             DateTime dtm = DateTime.Now;
             var rnd = new Random();
-            for (int i = 0; i < 1000; i++) {
+            for (int i = 0; i < 100; i++) {
                 var v = i.ToString("D2");
                
                 var a = new A( rnd.Next(1,100), v, dtm.AddDays(rnd.Next(0, 1000)));
@@ -112,16 +112,6 @@ namespace WindowsFormsApp1
             
         }
 
-        //private void MyChart_MouseLeftButtonPressed(object sender, MouseEventArgs e)
-        //{
-            
-        //    if (e.LeftButton == MouseButtonState.Pressed)
-        //    {
-        //        MessageBox.Show("The Left Mouse Button is pressed");
-        //    }
-
-        //}
-       
         
         
         private void checkBox_CheckedChanged(object sender, EventArgs e)
@@ -145,64 +135,75 @@ namespace WindowsFormsApp1
         {
             if (checkBoxZoom.Checked)
             {
-                //MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
-                //MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
-                //MyChart.MouseWheel += MyChart_MouseWheel;
+                MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+                MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
+                MyChart.MouseWheel += MyChart_MouseWheel;
                 MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
                 MyChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
+                MyChart.MouseDoubleClick   += new MouseEventHandler(MyChart_ZoomReset);
+
             }
             else {
-               
+
+                MyChart.MouseDoubleClick -= new MouseEventHandler(MyChart_ZoomReset);
                 var xAxis = MyChart.ChartAreas[0].AxisX;
                 var yAxis = MyChart.ChartAreas[0].AxisY;
                 xAxis.ScaleView.ZoomReset();
                 yAxis.ScaleView.ZoomReset();
-                //MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = false;
-                //MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = false;
-                //MyChart.MouseWheel -= MyChart_MouseWheel;
+                MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = false;
+                MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = false;
+                MyChart.MouseWheel -= MyChart_MouseWheel;
                 MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = false;
                 MyChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = false;
             }
         }
 
+        private void MyChart_ZoomReset(object sender, MouseEventArgs e) {
+
+            var xAxis = MyChart.ChartAreas[0].AxisX;
+            var yAxis = MyChart.ChartAreas[0].AxisY;
+            xAxis.ScaleView.ZoomReset();
+            yAxis.ScaleView.ZoomReset();
+        }
+
         private void MyChart_MouseWheel(object sender, MouseEventArgs e)
         {
-            //var chart = (Chart)sender;
-            //var xAxis = chart.ChartAreas[0].AxisX;
-            //var yAxis = chart.ChartAreas[0].AxisY;
+            var chart = (Chart)sender;
+           // var xAxis = chart.ChartAreas[0].AxisX;
+            var yAxis = chart.ChartAreas[0].AxisY;
 
-            //try
-            //{
-            //    if (e.Delta < 0) // Scrolled down.
-            //    {
-            //        xAxis.ScaleView.ZoomReset();
-            //        yAxis.ScaleView.ZoomReset();
-            //    }
-            //    else if (e.Delta > 0) // Scrolled up.
-            //    {
-            //        var xMin = xAxis.ScaleView.ViewMinimum;
-            //        var xMax = xAxis.ScaleView.ViewMaximum;
-            //        var yMin = yAxis.ScaleView.ViewMinimum;
-            //        var yMax = yAxis.ScaleView.ViewMaximum;
-            //        double k =2;
+            try
+            {
+                if (e.Delta < 0) // Scrolled down.
+                {
+                   // xAxis.ScaleView.ZoomReset();
+                    yAxis.ScaleView.ZoomReset();
+                }
+                else if (e.Delta > 0) // Scrolled up.
+                {
+                   // var xMin = xAxis.ScaleView.ViewMinimum;
+                   // var xMax = xAxis.ScaleView.ViewMaximum;
+                    var yMin = yAxis.ScaleView.ViewMinimum;
+                    var yMax = yAxis.ScaleView.ViewMaximum;
+                    double k = 2;
 
-            //        var posXStart = xAxis.PixelPositionToValue(e.Location.X) - (xMax - xMin) / k;
-            //        var posXFinish = xAxis.PixelPositionToValue(e.Location.X) + (xMax - xMin) / k;
-            //        var posYStart = yAxis.PixelPositionToValue(e.Location.Y) - (yMax - yMin) / k;
-            //        var posYFinish = yAxis.PixelPositionToValue(e.Location.Y) + (yMax - yMin) / k;
+                   // var posXStart = xAxis.PixelPositionToValue(e.Location.X) - (xMax - xMin) / k;
+                   // var posXFinish = xAxis.PixelPositionToValue(e.Location.X) + (xMax - xMin) / k;
+                    var posYStart = yAxis.PixelPositionToValue(e.Location.Y) - (yMax - yMin) / k;
+                    var posYFinish = yAxis.PixelPositionToValue(e.Location.Y) + (yMax - yMin) / k;
 
-            //        xAxis.ScaleView.Zoom(posXStart, posXFinish);
-            //        yAxis.ScaleView.Zoom(posYStart, posYFinish);
-            //    }
-            //}
-            //catch { }
+                   // xAxis.ScaleView.Zoom(posXStart, posXFinish);
+                    yAxis.ScaleView.Zoom(posYStart, posYFinish);
+                }
+            }
+            catch { }
         }
 
 
 
         private void checkBoxMeasurementMode_CheckedChanged(object sender, EventArgs e)
         {
-            //MessageBox.Show("checkBoxMeasurementMode_CheckedChanged");
+           
            
 
             if (checkBoxMeasurementMode.Checked)
@@ -249,7 +250,7 @@ namespace WindowsFormsApp1
                         {
                             var yVal = result.ChartArea.AxisY.PixelPositionToValue(pY);
                             var xVal = DateTime.FromOADate(result.ChartArea.AxisX.PixelPositionToValue(pX));
-                            show = $"{xVal}, {(int)yVal}";
+                            show = $"{xVal} : {Math.Round((double)yVal,2)}";
                             //labelPosCursor.Text = show;
 
                             //tooltip.Show(show, myChart, pX, pY - 20);
