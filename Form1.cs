@@ -14,6 +14,18 @@ namespace WindowsFormsApp1
     public partial class Form1 : Form
     {
 
+        private double prevXMax = 0;
+        private double prevXMin = 0;
+        private double prevYMax = 0;
+        private double prevYMin = 0;
+
+
+        private Point mDown = Point.Empty;
+        //первичное положение координат при загрузке
+        double firstXMax=0, firstXMin=0, firstYMax=0, firstYMin=0;
+
+
+
         Chart MyChart;
         //List<A> LstA = new List<A>();
         SortedSet<A> LstA = new SortedSet<A>(new ACompare());
@@ -52,21 +64,32 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
+            
+
             LstA.Clear();
-            MyChart.Series.Clear();  
+            MyChart.Series.Clear();
+
+            //MyChart.ChartAreas[0].AxisX.Maximum = firstXMax;
+            //MyChart.ChartAreas[0].AxisX.Minimum = firstXMin;
+            //MyChart.ChartAreas[0].AxisY.Maximum = firstYMax;
+            //MyChart.ChartAreas[0].AxisY.Minimum = firstYMin;
+            //MyChart.ChartAreas[0].AxisX  ;   
             DateTime dtm = DateTime.Now;
             var rnd = new Random();
             for (int i = 0; i < 100; i++) {
                 var v = i.ToString("D2");
                
-                var a = new A( rnd.Next(1,100), v, dtm.AddDays(rnd.Next(0, 1000)));
+                var a = new A( rnd.Next(1,100), v, dtm.AddHours (i));
                 LstA.Add(a);
 
             }
             //LstA.Sort(new ACompare());   
 
+            firstXMax = MyChart.ChartAreas[0].AxisX.Maximum;
+            firstXMin = MyChart.ChartAreas[0].AxisX.Minimum;
+            firstYMax = MyChart.ChartAreas[0].AxisY.Maximum;
+            firstYMin = MyChart.ChartAreas[0].AxisY.Minimum;
 
-                   
 
             Series s = new Series(NameSeries[0]);
             s.Legend = "myLegend";
@@ -135,6 +158,12 @@ namespace WindowsFormsApp1
         {
             if (checkBoxZoom.Checked)
             {
+                if (checkBoxPan.Checked)
+                {
+                    checkBoxPan.Checked = false;
+                    checkBoxPan_CheckedChanged(checkBoxPan, null);
+                }
+
                 MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
                 MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
                 MyChart.MouseWheel += MyChart_MouseWheel;
@@ -145,11 +174,12 @@ namespace WindowsFormsApp1
             }
             else {
 
+                //MyChart_ZoomReset(null,null);
                 MyChart.MouseDoubleClick -= new MouseEventHandler(MyChart_ZoomReset);
-                var xAxis = MyChart.ChartAreas[0].AxisX;
-                var yAxis = MyChart.ChartAreas[0].AxisY;
-                xAxis.ScaleView.ZoomReset();
-                yAxis.ScaleView.ZoomReset();
+                //var xAxis = MyChart.ChartAreas[0].AxisX;
+                //var yAxis = MyChart.ChartAreas[0].AxisY;
+                //xAxis.ScaleView.ZoomReset();
+                //yAxis.ScaleView.ZoomReset();
                 MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = false;
                 MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = false;
                 MyChart.MouseWheel -= MyChart_MouseWheel;
@@ -164,35 +194,43 @@ namespace WindowsFormsApp1
             var yAxis = MyChart.ChartAreas[0].AxisY;
             xAxis.ScaleView.ZoomReset();
             yAxis.ScaleView.ZoomReset();
+
+            //MyChart.ChartAreas[0].AxisX.Maximum = firstXMax;
+            //MyChart.ChartAreas[0].AxisX.Minimum = firstXMin;
+            //MyChart.ChartAreas[0].AxisY.Maximum = firstYMax;
+            //MyChart.ChartAreas[0].AxisY.Minimum = firstYMin;
+            //MyChart.Update();
+
+
         }
 
         private void MyChart_MouseWheel(object sender, MouseEventArgs e)
         {
             var chart = (Chart)sender;
-           // var xAxis = chart.ChartAreas[0].AxisX;
+            var xAxis = chart.ChartAreas[0].AxisX;
             var yAxis = chart.ChartAreas[0].AxisY;
 
             try
             {
                 if (e.Delta < 0) // Scrolled down.
                 {
-                   // xAxis.ScaleView.ZoomReset();
+                    xAxis.ScaleView.ZoomReset();
                     yAxis.ScaleView.ZoomReset();
                 }
                 else if (e.Delta > 0) // Scrolled up.
                 {
-                   // var xMin = xAxis.ScaleView.ViewMinimum;
-                   // var xMax = xAxis.ScaleView.ViewMaximum;
+                    var xMin = xAxis.ScaleView.ViewMinimum;
+                    var xMax = xAxis.ScaleView.ViewMaximum;
                     var yMin = yAxis.ScaleView.ViewMinimum;
                     var yMax = yAxis.ScaleView.ViewMaximum;
                     double k = 2;
 
-                   // var posXStart = xAxis.PixelPositionToValue(e.Location.X) - (xMax - xMin) / k;
-                   // var posXFinish = xAxis.PixelPositionToValue(e.Location.X) + (xMax - xMin) / k;
+                    var posXStart = xAxis.PixelPositionToValue(e.Location.X) - (xMax - xMin) / k;
+                    var posXFinish = xAxis.PixelPositionToValue(e.Location.X) + (xMax - xMin) / k;
                     var posYStart = yAxis.PixelPositionToValue(e.Location.Y) - (yMax - yMin) / k;
                     var posYFinish = yAxis.PixelPositionToValue(e.Location.Y) + (yMax - yMin) / k;
 
-                   // xAxis.ScaleView.Zoom(posXStart, posXFinish);
+                    xAxis.ScaleView.Zoom(posXStart, posXFinish);
                     yAxis.ScaleView.Zoom(posYStart, posYFinish);
                 }
             }
@@ -301,9 +339,80 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void groupBox2_Enter(object sender, EventArgs e)
-        {
+       
 
+        private void checkBoxPan_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox ch = (CheckBox)sender;
+            if (ch.Checked)
+            {
+                if (checkBoxZoom.Checked)
+                {
+                    checkBoxZoom.Checked = false;
+                    //Zoom_CheckedChanged(checkBoxZoom, null);
+                }
+                //MyChart.MouseDoubleClick += new MouseEventHandler(MyChart_ZoomReset);
+                MyChart.Cursor = Cursors.Hand;   
+                MyChart.MouseDown += new System.Windows.Forms.MouseEventHandler(chart_MouseDown);
+                MyChart.MouseMove  += new System.Windows.Forms.MouseEventHandler(chart_MouseMove);
+            }
+            else {
+                MyChart.MouseDown -= new System.Windows.Forms.MouseEventHandler(chart_MouseDown);
+                MyChart.MouseMove -= new System.Windows.Forms.MouseEventHandler(chart_MouseMove);
+                //MyChart.MouseDoubleClick -= new MouseEventHandler(MyChart_ZoomReset);
+                MyChart.Cursor = Cursors.Default;
+            }
+        }
+
+       
+
+
+
+        private void chart_MouseDown(object sender, MouseEventArgs e)
+        {
+            //Это событие происходит при нажатии пользователем кнопки мыши, когда указатель мыши находится на элементе управления.
+            //store previous data
+            if (e.Button == MouseButtons.Left)
+            {
+                mDown = e.Location;
+                prevXMax = MyChart.ChartAreas[0].AxisX.Maximum;
+                prevXMin = MyChart.ChartAreas[0].AxisX.Minimum;
+                prevYMax = MyChart.ChartAreas[0].AxisY.Maximum;
+                prevYMin = MyChart.ChartAreas[0].AxisY.Minimum;
+
+
+
+            }
+        }
+
+        private void chart_MouseMove(object sender, MouseEventArgs e)
+        {
+            Axis ax = MyChart.ChartAreas[0].AxisX;
+            Axis ay = MyChart.ChartAreas[0].AxisY;
+
+            //if mouse was moved and mouse left click
+            if (e.Button == MouseButtons.Left)
+            {
+                double xLast = ax.PixelPositionToValue(mDown.X);
+                double xNew = ax.PixelPositionToValue(e.X);
+                double yLast = ay.PixelPositionToValue(mDown.Y);
+                double yNew = ay.PixelPositionToValue(e.Y);
+
+                ax.Minimum = prevXMin + (xLast - xNew);
+                ax.Maximum = prevXMax + (xLast - xNew);
+                ay.Minimum = prevYMin + (yLast - yNew);
+                ay.Maximum = prevYMax + (yLast - yNew);
+
+                MyChart.ChartAreas[0].AxisX.ScaleView.Scroll(xNew);
+                MyChart.ChartAreas[0].AxisY.ScaleView.Scroll(yNew);
+
+
+                 //MyChart.Update();
+
+
+
+
+            }
         }
     }
 }
