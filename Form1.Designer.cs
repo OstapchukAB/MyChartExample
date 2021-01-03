@@ -34,10 +34,10 @@ namespace WindowsFormsApp1
             this.checkBoxLine = new System.Windows.Forms.CheckBox();
             this.checkBoxPoint = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.checkBoxPan = new System.Windows.Forms.CheckBox();
             this.checkBoxBlackTheme = new System.Windows.Forms.CheckBox();
             this.checkBoxMeasurementMode = new System.Windows.Forms.CheckBox();
             this.checkBoxZoom = new System.Windows.Forms.CheckBox();
-            this.checkBoxPan = new System.Windows.Forms.CheckBox();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,7 +69,7 @@ namespace WindowsFormsApp1
             // 
             this.checkBoxLine.AutoSize = true;
             this.checkBoxLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBoxLine.Location = new System.Drawing.Point(640, 37);
+            this.checkBoxLine.Location = new System.Drawing.Point(756, 37);
             this.checkBoxLine.Name = "checkBoxLine";
             this.checkBoxLine.Size = new System.Drawing.Size(58, 24);
             this.checkBoxLine.TabIndex = 2;
@@ -81,7 +81,7 @@ namespace WindowsFormsApp1
             // 
             this.checkBoxPoint.AutoSize = true;
             this.checkBoxPoint.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBoxPoint.Location = new System.Drawing.Point(716, 37);
+            this.checkBoxPoint.Location = new System.Drawing.Point(855, 37);
             this.checkBoxPoint.Name = "checkBoxPoint";
             this.checkBoxPoint.Size = new System.Drawing.Size(64, 24);
             this.checkBoxPoint.TabIndex = 3;
@@ -99,18 +99,29 @@ namespace WindowsFormsApp1
             this.groupBox2.Controls.Add(this.checkBoxPoint);
             this.groupBox2.Controls.Add(this.checkBoxLine);
             this.groupBox2.Controls.Add(this.button1);
-            this.groupBox2.Location = new System.Drawing.Point(182, 721);
+            this.groupBox2.Location = new System.Drawing.Point(123, 721);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1063, 82);
+            this.groupBox2.Size = new System.Drawing.Size(1122, 82);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
-       
+            // 
+            // checkBoxPan
+            // 
+            this.checkBoxPan.AutoSize = true;
+            this.checkBoxPan.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.checkBoxPan.Location = new System.Drawing.Point(313, 37);
+            this.checkBoxPan.Name = "checkBoxPan";
+            this.checkBoxPan.Size = new System.Drawing.Size(125, 24);
+            this.checkBoxPan.TabIndex = 7;
+            this.checkBoxPan.Text = "checkBoxPan";
+            this.checkBoxPan.UseVisualStyleBackColor = true;
+            this.checkBoxPan.CheckedChanged += new System.EventHandler(this.checkBoxPan_CheckedChanged);
             // 
             // checkBoxBlackTheme
             // 
             this.checkBoxBlackTheme.AutoSize = true;
             this.checkBoxBlackTheme.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBoxBlackTheme.Location = new System.Drawing.Point(818, 37);
+            this.checkBoxBlackTheme.Location = new System.Drawing.Point(945, 37);
             this.checkBoxBlackTheme.Name = "checkBoxBlackTheme";
             this.checkBoxBlackTheme.Size = new System.Drawing.Size(126, 24);
             this.checkBoxBlackTheme.TabIndex = 6;
@@ -122,7 +133,7 @@ namespace WindowsFormsApp1
             // 
             this.checkBoxMeasurementMode.AutoSize = true;
             this.checkBoxMeasurementMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBoxMeasurementMode.Location = new System.Drawing.Point(357, 37);
+            this.checkBoxMeasurementMode.Location = new System.Drawing.Point(474, 37);
             this.checkBoxMeasurementMode.Name = "checkBoxMeasurementMode";
             this.checkBoxMeasurementMode.Size = new System.Drawing.Size(164, 24);
             this.checkBoxMeasurementMode.TabIndex = 5;
@@ -134,24 +145,13 @@ namespace WindowsFormsApp1
             // 
             this.checkBoxZoom.AutoSize = true;
             this.checkBoxZoom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBoxZoom.Location = new System.Drawing.Point(551, 37);
+            this.checkBoxZoom.Location = new System.Drawing.Point(657, 37);
             this.checkBoxZoom.Name = "checkBoxZoom";
             this.checkBoxZoom.Size = new System.Drawing.Size(69, 24);
             this.checkBoxZoom.TabIndex = 4;
             this.checkBoxZoom.Text = "Zoom";
             this.checkBoxZoom.UseVisualStyleBackColor = true;
             this.checkBoxZoom.CheckedChanged += new System.EventHandler(this.Zoom_CheckedChanged);
-            // 
-            // checkBoxPan
-            // 
-            this.checkBoxPan.AutoSize = true;
-            this.checkBoxPan.Location = new System.Drawing.Point(243, 37);
-            this.checkBoxPan.Name = "checkBoxPan";
-            this.checkBoxPan.Size = new System.Drawing.Size(93, 17);
-            this.checkBoxPan.TabIndex = 7;
-            this.checkBoxPan.Text = "checkBoxPan";
-            this.checkBoxPan.UseVisualStyleBackColor = true;
-            this.checkBoxPan.CheckedChanged += new System.EventHandler(this.checkBoxPan_CheckedChanged);
             // 
             // Form1
             // 

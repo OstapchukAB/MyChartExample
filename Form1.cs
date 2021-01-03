@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyChartExample.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,6 +15,7 @@ namespace WindowsFormsApp1
     public partial class Form1 : Form
     {
 
+        bool KeyCtrl = false;
         private double prevXMax = 0;
         private double prevXMin = 0;
         private double prevYMax = 0;
@@ -25,6 +27,8 @@ namespace WindowsFormsApp1
         double firstXMax=0, firstXMin=0, firstYMax=0, firstYMin=0;
 
 
+        System.Windows.Forms.Cursor ZoomIn;
+        System.Windows.Forms.Cursor ZoomOut;
 
         Chart MyChart;
         //List<A> LstA = new List<A>();
@@ -76,7 +80,7 @@ namespace WindowsFormsApp1
             //MyChart.ChartAreas[0].AxisX  ;   
             DateTime dtm = DateTime.Now;
             var rnd = new Random();
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 50; i++) {
                 var v = i.ToString("D2");
                
                 var a = new A( rnd.Next(1,100), v, dtm.AddHours (i));
@@ -85,10 +89,10 @@ namespace WindowsFormsApp1
             }
             //LstA.Sort(new ACompare());   
 
-            firstXMax = MyChart.ChartAreas[0].AxisX.Maximum;
-            firstXMin = MyChart.ChartAreas[0].AxisX.Minimum;
-            firstYMax = MyChart.ChartAreas[0].AxisY.Maximum;
-            firstYMin = MyChart.ChartAreas[0].AxisY.Minimum;
+            //firstXMax = MyChart.ChartAreas[0].AxisX.Maximum;
+            //firstXMin = MyChart.ChartAreas[0].AxisX.Minimum;
+            //firstYMax = MyChart.ChartAreas[0].AxisY.Maximum;
+            //firstYMin = MyChart.ChartAreas[0].AxisY.Minimum;
 
 
             Series s = new Series(NameSeries[0]);
@@ -132,7 +136,11 @@ namespace WindowsFormsApp1
 
             checkBoxLine.Text = NameSeries[0];
             checkBoxPoint.Text = NameSeries[1];
-            
+            this.KeyPreview = true;
+
+            Bitmap BmpZoom_in = new Bitmap(new Bitmap(Resources.zoom_in), 32,32); 
+            ZoomIn  = new System.Windows.Forms.Cursor(BmpZoom_in.GetHicon());
+
         }
 
         
@@ -158,35 +166,66 @@ namespace WindowsFormsApp1
         {
             if (checkBoxZoom.Checked)
             {
-                if (checkBoxPan.Checked)
-                {
-                    checkBoxPan.Checked = false;
-                    checkBoxPan_CheckedChanged(checkBoxPan, null);
-                }
+                //if (checkBoxPan.Checked)
+                //{
+                //    checkBoxPan.Checked = false;
+                //    checkBoxPan_CheckedChanged(checkBoxPan, null);
+                //}
 
                 MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
                 MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
-                MyChart.MouseWheel += MyChart_MouseWheel;
-                MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
-                MyChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
-                MyChart.MouseDoubleClick   += new MouseEventHandler(MyChart_ZoomReset);
+                MyChart.MouseWheel += new System.Windows.Forms.MouseEventHandler(MyChart_MouseWheel);
+                MyChart.KeyDown += MyChart_KeyDown;
+                MyChart.KeyUp  += MyChart_KeyUp;
+                MyChart.Focus();  
+                //MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
+                //MyChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
+               // MyChart.MouseDoubleClick   += new MouseEventHandler(MyChart_ZoomReset);
 
             }
             else {
 
                 //MyChart_ZoomReset(null,null);
-                MyChart.MouseDoubleClick -= new MouseEventHandler(MyChart_ZoomReset);
+                MyChart.KeyDown -= MyChart_KeyDown;
+                MyChart.KeyUp -= MyChart_KeyUp;
+               // MyChart.MouseDoubleClick -= new MouseEventHandler(MyChart_ZoomReset);
                 //var xAxis = MyChart.ChartAreas[0].AxisX;
                 //var yAxis = MyChart.ChartAreas[0].AxisY;
                 //xAxis.ScaleView.ZoomReset();
                 //yAxis.ScaleView.ZoomReset();
                 MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = false;
                 MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = false;
-                MyChart.MouseWheel -= MyChart_MouseWheel;
-                MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = false;
-                MyChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = false;
+                MyChart.MouseWheel -= new System.Windows.Forms.MouseEventHandler(MyChart_MouseWheel);
+               // MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = false;
+                //MyChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = false;
             }
         }
+
+        void MyChart_KeyDown(object sender, KeyEventArgs e) {
+
+            //var k = (Keys) sender;
+            if (e.Control) {
+                KeyCtrl = true;
+                MyChart.Cursor = ZoomIn;   
+            }
+        }
+
+        void MyChart_KeyUp(object sender, KeyEventArgs e)
+        {
+
+            //var k = (Keys) sender;
+            if (!e.Control)
+            {
+                KeyCtrl = false;
+                if (checkBoxPan.Checked)
+                    MyChart.Cursor = Cursors.Hand;
+                else if  (checkBoxMeasurementMode.Checked)
+                    MyChart.Cursor = Cursors.Cross;
+                else
+                    MyChart.Cursor = Cursors.Default;
+            }
+        }
+
 
         private void MyChart_ZoomReset(object sender, MouseEventArgs e) {
 
@@ -206,6 +245,9 @@ namespace WindowsFormsApp1
 
         private void MyChart_MouseWheel(object sender, MouseEventArgs e)
         {
+            if (!KeyCtrl)
+                return;
+
             var chart = (Chart)sender;
             var xAxis = chart.ChartAreas[0].AxisX;
             var yAxis = chart.ChartAreas[0].AxisY;
@@ -235,13 +277,20 @@ namespace WindowsFormsApp1
                 }
             }
             catch { }
+            MyChart.Focus();  
         }
 
 
 
         private void checkBoxMeasurementMode_CheckedChanged(object sender, EventArgs e)
         {
-           
+            if (checkBoxPan.Checked) {
+                checkBoxPan.Checked = false;
+                checkBoxPan_CheckedChanged(checkBoxPan, null);
+
+
+
+            }
            
 
             if (checkBoxMeasurementMode.Checked)
@@ -263,7 +312,8 @@ namespace WindowsFormsApp1
 
         async private void myChart_MouseMove(object sender, MouseEventArgs e)
         {
-
+            if (KeyCtrl)
+                return;
             //labelPosCursor.BackColor = Color.White;
             var pos = e.Location;
             if (prevPosition.HasValue && pos == prevPosition.Value)
@@ -343,18 +393,21 @@ namespace WindowsFormsApp1
 
         private void checkBoxPan_CheckedChanged(object sender, EventArgs e)
         {
+            if (KeyCtrl)
+                return;
             CheckBox ch = (CheckBox)sender;
             if (ch.Checked)
             {
-                if (checkBoxZoom.Checked)
-                {
-                    checkBoxZoom.Checked = false;
-                    //Zoom_CheckedChanged(checkBoxZoom, null);
-                }
+                //if (checkBoxZoom.Checked)
+                //{
+                //    checkBoxZoom.Checked = false;
+                //    //Zoom_CheckedChanged(checkBoxZoom, null);
+                //}
                 //MyChart.MouseDoubleClick += new MouseEventHandler(MyChart_ZoomReset);
                 MyChart.Cursor = Cursors.Hand;   
                 MyChart.MouseDown += new System.Windows.Forms.MouseEventHandler(chart_MouseDown);
                 MyChart.MouseMove  += new System.Windows.Forms.MouseEventHandler(chart_MouseMove);
+               
             }
             else {
                 MyChart.MouseDown -= new System.Windows.Forms.MouseEventHandler(chart_MouseDown);
@@ -362,6 +415,7 @@ namespace WindowsFormsApp1
                 //MyChart.MouseDoubleClick -= new MouseEventHandler(MyChart_ZoomReset);
                 MyChart.Cursor = Cursors.Default;
             }
+            MyChart.Focus();
         }
 
        
@@ -387,6 +441,8 @@ namespace WindowsFormsApp1
 
         private void chart_MouseMove(object sender, MouseEventArgs e)
         {
+            if (KeyCtrl)
+                return;
             Axis ax = MyChart.ChartAreas[0].AxisX;
             Axis ay = MyChart.ChartAreas[0].AxisY;
 
