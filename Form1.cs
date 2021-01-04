@@ -73,26 +73,19 @@ namespace WindowsFormsApp1
             LstA.Clear();
             MyChart.Series.Clear();
 
-            //MyChart.ChartAreas[0].AxisX.Maximum = firstXMax;
-            //MyChart.ChartAreas[0].AxisX.Minimum = firstXMin;
-            //MyChart.ChartAreas[0].AxisY.Maximum = firstYMax;
-            //MyChart.ChartAreas[0].AxisY.Minimum = firstYMin;
-            //MyChart.ChartAreas[0].AxisX  ;   
+
             DateTime dtm = DateTime.Now;
             var rnd = new Random();
-            for (int i = 0; i < 50; i++) {
+            for (int i = 0; i < 500; i++) {
                 var v = i.ToString("D2");
                
-                var a = new A( rnd.Next(1,100), v, dtm.AddHours (i));
+                var a = new A( rnd.Next(1,100), v, dtm.AddMinutes  (i));
                 LstA.Add(a);
 
             }
             //LstA.Sort(new ACompare());   
 
-            //firstXMax = MyChart.ChartAreas[0].AxisX.Maximum;
-            //firstXMin = MyChart.ChartAreas[0].AxisX.Minimum;
-            //firstYMax = MyChart.ChartAreas[0].AxisY.Maximum;
-            //firstYMin = MyChart.ChartAreas[0].AxisY.Minimum;
+
 
 
             Series s = new Series(NameSeries[0]);
@@ -129,7 +122,13 @@ namespace WindowsFormsApp1
             MyChart.ChartAreas[0].AxisY.Title = "Коэффициент";
             MyChart.ChartAreas[0].AxisX.Title = "Дата";
 
-             
+            MyChart.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Hours ;
+            MyChart.ChartAreas[0].AxisX.LabelStyle.Format = "dd HH:mm:ss";
+            //MyChart.ChartAreas[0].AxisX.TextOrientation = TextOrientation.Rotated270;    
+            MyChart.ChartAreas[0].AxisX.Interval = 1;
+
+
+
 
 
 
@@ -164,6 +163,8 @@ namespace WindowsFormsApp1
 
         private void Zoom_CheckedChanged(object sender, EventArgs e)
         {
+            
+
             if (checkBoxZoom.Checked)
             {
                 //if (checkBoxPan.Checked)
@@ -172,15 +173,34 @@ namespace WindowsFormsApp1
                 //    checkBoxPan_CheckedChanged(checkBoxPan, null);
                 //}
 
-                MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
-                MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
-                MyChart.MouseWheel += new System.Windows.Forms.MouseEventHandler(MyChart_MouseWheel);
+                //MyChart.ChartAreas[0].CursorX.IsUserEnabled = false;         // red cursor at SelectionEnd
+                //MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
+                //MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = false;      // zoom into SelectedRange
+                //MyChart.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = true;
+                //MyChart.ChartAreas[0].CursorX.Interval = 0.001;               // set "resolution" of CursorX
+
+
+                //MyChart.ChartAreas[0].CursorY.IsUserEnabled = false;         
+                //MyChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
+                //MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = false;     
+                //MyChart.ChartAreas[0].AxisY.ScrollBar.IsPositionedInside = true;
+                //MyChart.ChartAreas[0].CursorY.Interval = 0.01;              
+
+
+
+                //MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+                //MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
+                //MyChart.MouseWheel += new System.Windows.Forms.MouseEventHandler(MyChart_MouseWheel);
                 MyChart.KeyDown += MyChart_KeyDown;
                 MyChart.KeyUp  += MyChart_KeyUp;
-                MyChart.Focus();  
+                //MyChart.Focus();  
                 //MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
                 //MyChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
-               // MyChart.MouseDoubleClick   += new MouseEventHandler(MyChart_ZoomReset);
+                //MyChart.MouseDoubleClick   += new MouseEventHandler(MyChart_ZoomReset);
+               
+                MyChart.SelectionRangeChanging += MyChart_SelectionRangeChanging;
+                buttonZoomIn.Click += button_ZoomIn;
+                buttonZoomOut.Click += button_ZoomOut; 
 
             }
             else {
@@ -188,25 +208,93 @@ namespace WindowsFormsApp1
                 //MyChart_ZoomReset(null,null);
                 MyChart.KeyDown -= MyChart_KeyDown;
                 MyChart.KeyUp -= MyChart_KeyUp;
-               // MyChart.MouseDoubleClick -= new MouseEventHandler(MyChart_ZoomReset);
+                MyChart.SelectionRangeChanging -= MyChart_SelectionRangeChanging;
+                // MyChart.MouseDoubleClick -= new MouseEventHandler(MyChart_ZoomReset);
                 //var xAxis = MyChart.ChartAreas[0].AxisX;
                 //var yAxis = MyChart.ChartAreas[0].AxisY;
                 //xAxis.ScaleView.ZoomReset();
                 //yAxis.ScaleView.ZoomReset();
-                MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = false;
-                MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = false;
-                MyChart.MouseWheel -= new System.Windows.Forms.MouseEventHandler(MyChart_MouseWheel);
-               // MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = false;
+                //MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = false;
+                //MyChart.ChartAreas[0].AxisY.ScaleView.Zoomable = false;
+                ////MyChart.MouseWheel -= new System.Windows.Forms.MouseEventHandler(MyChart_MouseWheel);
+                //MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = false;
                 //MyChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = false;
+
+                MyChart.ChartAreas[0].CursorX.IsUserEnabled = false;         // red cursor at SelectionEnd
+                MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = false;
+                MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = false;      // zoom into SelectedRange
+                MyChart.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = false;
+                //MyChart.ChartAreas[0].CursorX.Interval = 0.001;
             }
         }
 
-        void MyChart_KeyDown(object sender, KeyEventArgs e) {
+       
 
+        private void MyChart_SelectionRangeChanging(object sender, CursorEventArgs e)
+        {
+            double x1 = e.NewSelectionStart; // or: chart1.ChartAreas[0].CursorX.SelectionStart;
+            double x2 = e.NewSelectionEnd;        // or: x2 = chart1.ChartAreas[0].CursorX.SelectionEnd;
+                  
+            double diffx1x2 = x2 - x1;
+            DateTime dtx1 =  DateTime.FromOADate(x1);
+            DateTime dtx2 = DateTime.FromOADate(x2);
+            label1.Text = $"x1={dtx1}, x2={dtx2}, delta={dtx2-dtx1}";  
+
+        }
+
+        private void button_ZoomIn(object sender, EventArgs e)
+        {
+            double x1 = MyChart.ChartAreas[0].CursorX.SelectionStart;  // x1 = X1
+            double x2 = MyChart.ChartAreas[0].CursorX.SelectionEnd;    // x2 = X2
+
+            if (x2 == x1)
+                return;
+            if (x2 > x1)
+            {
+                // hard setting: chart1.ChartAreas[0].AxisX.Minimum = x1;
+                // hard setting: chart1.ChartAreas[0].AxisX.Maximum = x2;
+                MyChart.ChartAreas[0].AxisX.ScaleView.Zoom(x1, x2); // dynamic approach with scrollbar
+            }
+            else
+            {
+                MyChart.ChartAreas[0].AxisX.ScaleView.Zoom(x2, x1);
+            }
+        }
+
+        private void button_ZoomOut(object sender, EventArgs e)
+        {
+            MyChart.ChartAreas[0].AxisX.ScaleView.ZoomReset(0);
+            MyChart.ChartAreas[0].AxisY.ScaleView.ZoomReset(0);
+        }
+
+
+        void MyChart_KeyDown(object sender, KeyEventArgs e) {
+            MyChart.Focus();  
             //var k = (Keys) sender;
             if (e.Control) {
+
+
                 KeyCtrl = true;
-                MyChart.Cursor = ZoomIn;   
+
+                if (checkBoxZoom.Checked)
+                {
+                    MyChart.Cursor = ZoomIn;
+                    MyChart.ChartAreas[0].CursorX.IsUserEnabled = false;         // red cursor at SelectionEnd
+                    MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
+                    MyChart.ChartAreas[0].AxisX.ScaleView.Zoomable = false;      // zoom into SelectedRange
+                    MyChart.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = true;
+                    MyChart.ChartAreas[0].CursorX.Interval = 0.001;
+                }
+                //else {
+
+                //    MyChart.Cursor =Cursors.Default ;
+                //       // red cursor at SelectionEnd
+                //    MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = false;
+        
+                //    MyChart.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = false;
+     
+
+                //}
             }
         }
 
@@ -219,8 +307,18 @@ namespace WindowsFormsApp1
                 KeyCtrl = false;
                 if (checkBoxPan.Checked)
                     MyChart.Cursor = Cursors.Hand;
-                else if  (checkBoxMeasurementMode.Checked)
+                else if (checkBoxMeasurementMode.Checked)
                     MyChart.Cursor = Cursors.Cross;
+                else if (checkBoxZoom.Checked) {
+
+                    MyChart.Cursor = Cursors.Default;
+                    // red cursor at SelectionEnd
+                    MyChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = false;
+
+                    MyChart.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = false;
+
+                }
+
                 else
                     MyChart.Cursor = Cursors.Default;
             }
@@ -388,8 +486,6 @@ namespace WindowsFormsApp1
 
             }
         }
-
-       
 
         private void checkBoxPan_CheckedChanged(object sender, EventArgs e)
         {

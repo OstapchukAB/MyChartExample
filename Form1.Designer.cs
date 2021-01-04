@@ -38,6 +38,9 @@ namespace WindowsFormsApp1
             this.checkBoxBlackTheme = new System.Windows.Forms.CheckBox();
             this.checkBoxMeasurementMode = new System.Windows.Forms.CheckBox();
             this.checkBoxZoom = new System.Windows.Forms.CheckBox();
+            this.buttonZoomIn = new System.Windows.Forms.Button();
+            this.buttonZoomOut = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,7 +49,7 @@ namespace WindowsFormsApp1
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.Location = new System.Drawing.Point(15, 12);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(197, 57);
+            this.button1.Size = new System.Drawing.Size(133, 57);
             this.button1.TabIndex = 0;
             this.button1.Text = "Построить";
             this.button1.UseVisualStyleBackColor = true;
@@ -60,7 +63,7 @@ namespace WindowsFormsApp1
             this.groupBox1.AutoSize = true;
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1290, 703);
+            this.groupBox1.Size = new System.Drawing.Size(1290, 622);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
@@ -69,7 +72,7 @@ namespace WindowsFormsApp1
             // 
             this.checkBoxLine.AutoSize = true;
             this.checkBoxLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBoxLine.Location = new System.Drawing.Point(756, 37);
+            this.checkBoxLine.Location = new System.Drawing.Point(912, 29);
             this.checkBoxLine.Name = "checkBoxLine";
             this.checkBoxLine.Size = new System.Drawing.Size(58, 24);
             this.checkBoxLine.TabIndex = 2;
@@ -81,7 +84,7 @@ namespace WindowsFormsApp1
             // 
             this.checkBoxPoint.AutoSize = true;
             this.checkBoxPoint.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBoxPoint.Location = new System.Drawing.Point(855, 37);
+            this.checkBoxPoint.Location = new System.Drawing.Point(1011, 29);
             this.checkBoxPoint.Name = "checkBoxPoint";
             this.checkBoxPoint.Size = new System.Drawing.Size(64, 24);
             this.checkBoxPoint.TabIndex = 3;
@@ -92,6 +95,8 @@ namespace WindowsFormsApp1
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox2.Controls.Add(this.buttonZoomOut);
+            this.groupBox2.Controls.Add(this.buttonZoomIn);
             this.groupBox2.Controls.Add(this.checkBoxPan);
             this.groupBox2.Controls.Add(this.checkBoxBlackTheme);
             this.groupBox2.Controls.Add(this.checkBoxMeasurementMode);
@@ -99,9 +104,9 @@ namespace WindowsFormsApp1
             this.groupBox2.Controls.Add(this.checkBoxPoint);
             this.groupBox2.Controls.Add(this.checkBoxLine);
             this.groupBox2.Controls.Add(this.button1);
-            this.groupBox2.Location = new System.Drawing.Point(123, 721);
+            this.groupBox2.Location = new System.Drawing.Point(12, 721);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1122, 82);
+            this.groupBox2.Size = new System.Drawing.Size(1233, 82);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             // 
@@ -109,7 +114,7 @@ namespace WindowsFormsApp1
             // 
             this.checkBoxPan.AutoSize = true;
             this.checkBoxPan.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBoxPan.Location = new System.Drawing.Point(313, 37);
+            this.checkBoxPan.Location = new System.Drawing.Point(547, 29);
             this.checkBoxPan.Name = "checkBoxPan";
             this.checkBoxPan.Size = new System.Drawing.Size(125, 24);
             this.checkBoxPan.TabIndex = 7;
@@ -121,7 +126,7 @@ namespace WindowsFormsApp1
             // 
             this.checkBoxBlackTheme.AutoSize = true;
             this.checkBoxBlackTheme.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBoxBlackTheme.Location = new System.Drawing.Point(945, 37);
+            this.checkBoxBlackTheme.Location = new System.Drawing.Point(1101, 29);
             this.checkBoxBlackTheme.Name = "checkBoxBlackTheme";
             this.checkBoxBlackTheme.Size = new System.Drawing.Size(126, 24);
             this.checkBoxBlackTheme.TabIndex = 6;
@@ -133,7 +138,7 @@ namespace WindowsFormsApp1
             // 
             this.checkBoxMeasurementMode.AutoSize = true;
             this.checkBoxMeasurementMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBoxMeasurementMode.Location = new System.Drawing.Point(474, 37);
+            this.checkBoxMeasurementMode.Location = new System.Drawing.Point(711, 29);
             this.checkBoxMeasurementMode.Name = "checkBoxMeasurementMode";
             this.checkBoxMeasurementMode.Size = new System.Drawing.Size(164, 24);
             this.checkBoxMeasurementMode.TabIndex = 5;
@@ -145,7 +150,7 @@ namespace WindowsFormsApp1
             // 
             this.checkBoxZoom.AutoSize = true;
             this.checkBoxZoom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBoxZoom.Location = new System.Drawing.Point(657, 37);
+            this.checkBoxZoom.Location = new System.Drawing.Point(460, 29);
             this.checkBoxZoom.Name = "checkBoxZoom";
             this.checkBoxZoom.Size = new System.Drawing.Size(69, 24);
             this.checkBoxZoom.TabIndex = 4;
@@ -153,11 +158,42 @@ namespace WindowsFormsApp1
             this.checkBoxZoom.UseVisualStyleBackColor = true;
             this.checkBoxZoom.CheckedChanged += new System.EventHandler(this.Zoom_CheckedChanged);
             // 
+            // buttonZoomIn
+            // 
+            this.buttonZoomIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonZoomIn.Location = new System.Drawing.Point(243, 12);
+            this.buttonZoomIn.Name = "buttonZoomIn";
+            this.buttonZoomIn.Size = new System.Drawing.Size(84, 57);
+            this.buttonZoomIn.TabIndex = 8;
+            this.buttonZoomIn.Text = "ZoomIn";
+            this.buttonZoomIn.UseVisualStyleBackColor = true;
+            // 
+            // buttonZoomOut
+            // 
+            this.buttonZoomOut.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonZoomOut.Location = new System.Drawing.Point(348, 12);
+            this.buttonZoomOut.Name = "buttonZoomOut";
+            this.buttonZoomOut.Size = new System.Drawing.Size(90, 57);
+            this.buttonZoomOut.TabIndex = 9;
+            this.buttonZoomOut.Text = "ZoomOut";
+            this.buttonZoomOut.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(81, 663);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "label1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1314, 816);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
@@ -181,6 +217,9 @@ namespace WindowsFormsApp1
         private System.Windows.Forms.CheckBox checkBoxMeasurementMode;
         private System.Windows.Forms.CheckBox checkBoxBlackTheme;
         private System.Windows.Forms.CheckBox checkBoxPan;
+        private System.Windows.Forms.Button buttonZoomOut;
+        private System.Windows.Forms.Button buttonZoomIn;
+        private System.Windows.Forms.Label label1;
     }
 }
 
